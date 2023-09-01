@@ -5,7 +5,8 @@
 
         public static void Main(string[] args)
         {
-            GameController controller = new GameController();
+            IUI ui = new ConsoleIO();
+            GameController controller = new GameController(ui);
             controller.StartGame();
         }
         

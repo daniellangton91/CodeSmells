@@ -3,7 +3,7 @@
     internal interface IGame
     {
         void PlayGame();
-        void GenerateRandomNumber();
+        string GenerateRandomNumber();
         void CheckCorrectAnswer();
     }
 }

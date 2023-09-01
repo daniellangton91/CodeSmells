@@ -3,14 +3,16 @@
     internal class Moo : IGame
     {
         private IUI uI;
+        private IFileHandler storage;
         private int numberOfGuesses;
         private string guess;
         private bool keepPlaying = true;
         private string goal;
         private string bullsAndCowsResult;
-        public Moo(IUI ui) 
+        public Moo(IUI ui, IFileHandler storage) 
         {
             this.uI = ui;
+            this.storage = storage;
         }
         public void PlayGame()
         {
@@ -27,9 +29,8 @@
                 uI.PutString("New game:");
                 CheckCorrectAnswer();
                 player.UpdateGuesses(numberOfGuesses);
-                //Storage.SaveTextToFile(player, "MastermindStatistics");
-                //Storage.DisplayStatistics();
-                DisplayPlayerTopList();
+                storage.PutStatisticsToFile(player, "MooStats");
+                storage.DisplayPlayerStatistics();
                 uI.PutString("Correct, it took " + numberOfGuesses + " guesses\n");
                 uI.PutString("Play a new game?");
                 string Answer = uI.GetString();
@@ -101,37 +102,6 @@
                 }
             }
             return "BBBB".Substring(0, bulls) + "," + "CCCC".Substring(0, cows);
-        }
-        public void DisplayPlayerTopList()
-        {
-            StreamReader input = new StreamReader("result.txt");
-            List<Player> playerResults = new List<Player>();
-            string line;
-            while ((line = input.ReadLine()) != null)
-            {
-                string[] nameAndScore = line.Split(new string[] { "#&#" }, StringSplitOptions.None);
-                string name = nameAndScore[0];
-                int guesses = Convert.ToInt32(nameAndScore[1]);
-                Player player = new Player(name, guesses);
-                int pos = playerResults.IndexOf(player);
-                if (pos < 0)
-                {
-                    playerResults.Add(player);
-                }
-                else
-                {
-                    playerResults[pos].Update(guesses);
-                }
-
-
-            }
-            playerResults.Sort((p1, p2) => p1.Average().CompareTo(p2.Average()));
-            uI.PutString("Player   games average");
-            foreach (Player p in playerResults)
-            {
-                uI.PutString(string.Format("{0,-9}{1,5:D}{2,9:F2}", p.Name, p.NGames, p.Average()));
-            }
-            input.Close();
-        }
+        }        
     }
 }

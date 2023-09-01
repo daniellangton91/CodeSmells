@@ -4,9 +4,11 @@
     {
         private IUI uI;
         private IGame game;
-        public GameController(IUI ui) 
+        private IFileHandler storage;
+        public GameController(IUI ui, IFileHandler storage) 
         {
             this.uI = ui;
+            this.storage = storage;
         }
         private void SetGame(IGame game)
         {
@@ -26,7 +28,7 @@
                 switch (gameChoice)
                 {
                     case 1:
-                        SetGame(new Moo(uI));
+                        SetGame(new Moo(uI, storage));
                         game.PlayGame();
                         break;
                     case 2:

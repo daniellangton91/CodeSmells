@@ -6,7 +6,8 @@
         public static void Main(string[] args)
         {
             IUI ui = new ConsoleIO();
-            GameController controller = new GameController(ui);
+            IFileHandler storage = new LocalStorage(ui);
+            GameController controller = new GameController(ui, storage);
             controller.StartGame();
         }
         

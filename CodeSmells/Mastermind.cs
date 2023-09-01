@@ -7,7 +7,7 @@
             throw new NotImplementedException();
         }
 
-        public void GenerateRandomNumber()
+        public string GenerateRandomNumber()
         {
             throw new NotImplementedException();
         }

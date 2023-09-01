@@ -10,62 +10,62 @@ namespace CodeSmells
     {
         public void StartGame()
         {
-            bool playOn = true;
+            bool keepPlaying = true;
             Console.WriteLine("Enter your user name:\n");
-            string name = Console.ReadLine();
+            string playerName = Console.ReadLine();
 
-            while (playOn)
+            while (keepPlaying)
             {
-                string goal = makeGoal();
+                string gameGoal = GenerateRandomNumber();
 
 
                 Console.WriteLine("New game:\n");
                 //comment out or remove next line to play real games!
-                Console.WriteLine("For practice, number is: " + goal + "\n");
-                string guess = Console.ReadLine();
+                Console.WriteLine("For practice, number is: " + gameGoal + "\n");
+                string playerGuess = Console.ReadLine();
 
-                int nGuess = 1;
-                string bbcc = checkBC(goal, guess);
-                Console.WriteLine(bbcc + "\n");
-                while (bbcc != "BBBB,")
+                int numberOfPlayerGuesses = 1;
+                string bullsAndCowsResult = CompareGuessToGoal(gameGoal, playerGuess);
+                Console.WriteLine(bullsAndCowsResult + "\n");
+                while (bullsAndCowsResult != "BBBB,")
                 {
-                    nGuess++;
-                    guess = Console.ReadLine();
-                    Console.WriteLine(guess + "\n");
-                    bbcc = checkBC(goal, guess);
-                    Console.WriteLine(bbcc + "\n");
+                    numberOfPlayerGuesses++;
+                    playerGuess = Console.ReadLine();
+                    Console.WriteLine(playerGuess + "\n");
+                    bullsAndCowsResult = CompareGuessToGoal(gameGoal, playerGuess);
+                    Console.WriteLine(bullsAndCowsResult + "\n");
                 }
                 StreamWriter output = new StreamWriter("result.txt", append: true);
-                output.WriteLine(name + "#&#" + nGuess);
+                output.WriteLine(playerName + "#&#" + numberOfPlayerGuesses);
                 output.Close();
-                showTopList();
-                Console.WriteLine("Correct, it took " + nGuess + " guesses\nContinue?");
+                DisplayPlayerTopList();
+                Console.WriteLine("Correct, it took " + numberOfPlayerGuesses + " guesses\nContinue?");
                 string answer = Console.ReadLine();
                 if (answer != null && answer != "" && answer.Substring(0, 1) == "n")
                 {
-                    playOn = false;
+                    keepPlaying = false;
                 }
             }
         }
-        static string makeGoal()
+        static string GenerateRandomNumber()
         {
             Random randomGenerator = new Random();
-            string goal = "";
+            string randomNumbers = "";
             for (int i = 0; i < 4; i++)
             {
                 int random = randomGenerator.Next(10);
                 string randomDigit = "" + random;
-                while (goal.Contains(randomDigit))
+                while (randomNumbers.Contains(randomDigit))
                 {
                     random = randomGenerator.Next(10);
                     randomDigit = "" + random;
                 }
-                goal = goal + randomDigit;
+                randomNumbers = randomNumbers + randomDigit;
             }
-            return goal;
+            return randomNumbers;
         }
 
-        static string checkBC(string goal, string guess)
+        static string CompareGuessToGoal(string goal, string guess)
         {
             int cows = 0, bulls = 0;
             guess += "    ";     // if player entered less than 4 chars
@@ -90,32 +90,32 @@ namespace CodeSmells
         }
 
 
-        static void showTopList()
+        static void DisplayPlayerTopList()
         {
             StreamReader input = new StreamReader("result.txt");
-            List<Player> results = new List<Player>();
+            List<Player> playerResults = new List<Player>();
             string line;
             while ((line = input.ReadLine()) != null)
             {
                 string[] nameAndScore = line.Split(new string[] { "#&#" }, StringSplitOptions.None);
                 string name = nameAndScore[0];
                 int guesses = Convert.ToInt32(nameAndScore[1]);
-                Player pd = new Player(name, guesses);
-                int pos = results.IndexOf(pd);
+                Player player = new Player(name, guesses);
+                int pos = playerResults.IndexOf(player);
                 if (pos < 0)
                 {
-                    results.Add(pd);
+                    playerResults.Add(player);
                 }
                 else
                 {
-                    results[pos].Update(guesses);
+                    playerResults[pos].Update(guesses);
                 }
 
 
             }
-            results.Sort((p1, p2) => p1.Average().CompareTo(p2.Average()));
+            playerResults.Sort((p1, p2) => p1.Average().CompareTo(p2.Average()));
             Console.WriteLine("Player   games average");
-            foreach (Player p in results)
+            foreach (Player p in playerResults)
             {
                 Console.WriteLine(string.Format("{0,-9}{1,5:D}{2,9:F2}", p.Name, p.NGames, p.Average()));
             }

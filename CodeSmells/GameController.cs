@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CodeSmells
+﻿namespace CodeSmells
 {
     internal class GameController
     {
@@ -34,6 +27,7 @@ namespace CodeSmells
                 {
                     case 1:
                         SetGame(new Moo(uI));
+                        game.PlayGame();
                         break;
                     case 2:
                         //SetGame(new Mastermind(uI));
@@ -41,9 +35,10 @@ namespace CodeSmells
                     case 3:
                         uI.Exit();
                         break;
-
-                }
-                game.PlayGame();
+                    default:
+                        uI.PutString("Make a correct choice");
+                        break;
+                }                
             } while (true);
         }        
     }

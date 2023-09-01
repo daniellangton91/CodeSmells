@@ -3,13 +3,61 @@
     internal class Moo : IGame
     {
         private IUI uI;
+        private int numberOfGuesses;
+        private string guess;
+        private bool keepPlaying = true;
+        private string goal;
+        private string bullsAndCowsResult;
         public Moo(IUI ui) 
         {
             this.uI = ui;
         }
+        public void PlayGame()
+        {
+            uI.Clear();
+            uI.PutString("MooGame\n");
+            uI.PutString("Enter your user name:");
+            Player player = new Player(uI.GetString());
+            do
+            {
+                player.UpdatePlayedGames();
+                numberOfGuesses = 0;
+                goal = GenerateRandomNumber();
+                PracticeGame();
+                uI.PutString("New game:");
+                CheckCorrectAnswer();
+                player.UpdateGuesses(numberOfGuesses);
+                //Storage.SaveTextToFile(player, "MastermindStatistics");
+                //Storage.DisplayStatistics();
+                DisplayPlayerTopList();
+                uI.PutString("Correct, it took " + numberOfGuesses + " guesses\n");
+                uI.PutString("Play a new game?");
+                string Answer = uI.GetString();
+                if (Answer != null && Answer != "" && Answer.Substring(0, 1) == "n")
+                {
+                    keepPlaying = false;
+                }
+                uI.Clear();
+            } while (keepPlaying == true);
+        }
         public void CheckCorrectAnswer()
         {
-            throw new NotImplementedException();
+            do
+            {
+                guess = uI.GetString();
+                bullsAndCowsResult = CompareGuessToGoal(goal, guess);
+                uI.PutString($"{bullsAndCowsResult}");
+                numberOfGuesses++;
+            } while (guess != goal);
+        }
+        private void PracticeGame()
+        {
+            uI.PutString("Do you want to practice y/n?");
+            string practiceAnswer = uI.GetString();
+            if (practiceAnswer == "y")
+            {
+                uI.PutString("For practice, number is: " + goal + "\n");
+            }
         }
 
         public string GenerateRandomNumber()
@@ -30,45 +78,7 @@
             return randomNumbers;
         }
 
-        public void PlayGame()
-        {
-            bool keepPlaying = true;
-            uI.PutString("Enter your user name:\n");
-            string playerName = uI.GetString();
 
-            while (keepPlaying)
-            {
-                string gameGoal = GenerateRandomNumber();
-
-
-                uI.PutString("New game:\n");
-                //comment out or remove next line to play real games!
-                uI.PutString("For practice, number is: " + gameGoal + "\n");
-                string playerGuess = uI.GetString();
-
-                int numberOfPlayerGuesses = 1;
-                string bullsAndCowsResult = CompareGuessToGoal(gameGoal, playerGuess);
-                uI.PutString(bullsAndCowsResult + "\n");
-                while (bullsAndCowsResult != "BBBB,")
-                {
-                    numberOfPlayerGuesses++;
-                    playerGuess = uI.GetString();
-                    uI.PutString(playerGuess + "\n");
-                    bullsAndCowsResult = CompareGuessToGoal(gameGoal, playerGuess);
-                    uI.PutString(bullsAndCowsResult + "\n");
-                }
-                StreamWriter output = new StreamWriter("result.txt", append: true);
-                output.WriteLine(playerName + "#&#" + numberOfPlayerGuesses);
-                output.Close();
-                DisplayPlayerTopList();
-                uI.PutString("Correct, it took " + numberOfPlayerGuesses + " guesses\nContinue?");
-                string answer = uI.GetString();
-                if (answer != null && answer != "" && answer.Substring(0, 1) == "n")
-                {
-                    keepPlaying = false;
-                }
-            }
-        }
         static string CompareGuessToGoal(string goal, string guess)
         {
             int cows = 0, bulls = 0;

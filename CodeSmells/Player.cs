@@ -1,4 +1,6 @@
-﻿namespace CodeSmells
+﻿using System.Xml.Linq;
+
+namespace CodeSmells
 {
     public class Player
     {
@@ -13,7 +15,20 @@
             NGames = 1;
             totalGuess = guesses;
         }
+        public Player(string name)
+        {
+            this.Name = name;
+            NGames = 0;
+        }
+        public void UpdatePlayedGames()
+        {
+            NGames++;
+        }
 
+        public void UpdateGuesses(int guesses)
+        {
+            totalGuess += guesses;
+        }
         public void Update(int guesses)
         {
             totalGuess += guesses;

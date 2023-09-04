@@ -19,5 +19,22 @@
             }
             return goal;
         }
+        public override string CompareGuessToGoal(string goal, string guess)
+        {
+            string cows = "", bulls = "";
+            var goalAsChars = goal.AsEnumerable();
+            for (int i = 0; i < goal.Length; i++)
+            {
+                if (guess[i] == goal[i])
+                {
+                    bulls += "B";
+                }
+                else
+                {
+                    cows += goalAsChars.Contains(guess[i]) ? "C" : "";
+                }
+            }
+            return $"{bulls},{cows}";
+        }
     }
 }

@@ -20,35 +20,44 @@ namespace CodeSmells
         public void CheckCorrectAnswer()
         {
             do
-            {
-                guess = uI.GetString();
+            {                
+                guess = GetGuess();
                 bullsAndCowsResult = CompareGuessToGoal(goal, guess);
                 uI.PutString($"{bullsAndCowsResult}");
                 numberOfGuesses++;
             } while (guess != goal);
         }
-        static string CompareGuessToGoal(string goal, string guess)
+        public string GetGuess()
         {
-            int cows = 0, bulls = 0;
-            guess += "    ";     // if player entered less than 4 chars
-            for (int i = 0; i < 4; i++)
+            string guessAsString = uI.GetString();
+            while(guessAsString.Length != 4 || !int.TryParse(guessAsString, out int guessAsInt))
             {
-                for (int j = 0; j < 4; j++)
+                uI.PutString("Enter a 4 digit number");
+                guessAsString = uI.GetString();
+            }
+            return guessAsString;
+        }
+        static string CompareGuessToGoal(string goal, string guess)
+        {       
+            string cows = "", bulls = "";
+            for (int i = 0; i < goal.Length; i++)
+            {
+                for (int j = 0; j < guess.Length; j++)
                 {
                     if (goal[i] == guess[j])
                     {
                         if (i == j)
                         {
-                            bulls++;
+                            bulls += "B";
                         }
                         else
                         {
-                            cows++;
+                            cows += "C";
                         }
                     }
                 }
             }
-            return "BBBB".Substring(0, bulls) + "," + "CCCC".Substring(0, cows);
+            return $"{bulls},{cows}";
         }
         public abstract string GenerateRandomNumber();
 

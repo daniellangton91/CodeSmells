@@ -22,8 +22,7 @@ namespace CodeSmells
             do
             {                
                 guess = GetGuess();
-                bullsAndCowsResult = CompareGuessToGoal(goal, guess);
-                uI.PutString($"{bullsAndCowsResult}");
+                uI.PutString(CompareGuessToGoal(goal, guess));
                 numberOfGuesses++;
             } while (guess != goal);
         }
@@ -40,21 +39,16 @@ namespace CodeSmells
         static string CompareGuessToGoal(string goal, string guess)
         {       
             string cows = "", bulls = "";
-            for (int i = 0; i < goal.Length; i++)
+            var goalAsChars = goal.AsEnumerable();
+            for(int i= 0; i < goal.Length; i++)
             {
-                for (int j = 0; j < guess.Length; j++)
+                if (guess[i] == goal[i])
                 {
-                    if (goal[i] == guess[j])
-                    {
-                        if (i == j)
-                        {
-                            bulls += "B";
-                        }
-                        else
-                        {
-                            cows += "C";
-                        }
-                    }
+                    bulls += "B";
+                }
+                else
+                {
+                    cows += goalAsChars.Contains(guess[i]) ? "C" : "";
                 }
             }
             return $"{bulls},{cows}";

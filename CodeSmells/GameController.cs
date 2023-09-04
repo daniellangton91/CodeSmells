@@ -14,7 +14,6 @@
         {
             this.game = game;
         }
-
         public void StartGame()
         {
             do
@@ -24,7 +23,7 @@
                 "1: Moo\n" +
                 "2: Mastermind\n" +
                 "3: Exit");
-                int gameChoice = Convert.ToInt32(uI.GetString());
+                int gameChoice = Number();
                 switch (gameChoice)
                 {
                     case 1:
@@ -32,7 +31,8 @@
                         game.PlayGame();
                         break;
                     case 2:
-                        //SetGame(new Mastermind(uI));
+                        SetGame(new Mastermind(uI, storage));
+                        game.PlayGame();
                         break;
                     case 3:
                         uI.Exit();
@@ -42,6 +42,17 @@
                         break;
                 }                
             } while (true);
-        }        
+        } 
+        public int Number()
+        {
+            string input = Console.ReadLine();
+            int menuChoice;
+            while(!int.TryParse(input, out menuChoice))
+            {
+                uI.PutString("Input must be a number");
+                input = Console.ReadLine();
+            }
+            return menuChoice;
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace CodeSmells
 {
-    internal interface IFileHandler
+    public interface IFileHandler
     {
         void PutStatisticsToFile(Player player, string fileName);
         void GetStatisticsFromFile(string fileName);

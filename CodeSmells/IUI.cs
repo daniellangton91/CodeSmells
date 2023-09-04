@@ -1,6 +1,6 @@
 ﻿namespace CodeSmells
 {
-    internal interface IUI
+    public interface IUI
     {
         void PutString(string input);
         string GetString();

@@ -7,7 +7,7 @@
             IUI uI = new ConsoleIO();
             IDataHandler fileStorage = new FileHandler(uI);
             GameController controller = new(uI, fileStorage);
-            controller.StartGame();
+            controller.Start();
         }        
     }    
 }

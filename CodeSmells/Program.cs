@@ -2,14 +2,12 @@
 {
     class Program
     {
-
-        public static void Main(string[] args)
+        public static void Main()
         {
-            IUI ui = new ConsoleIO();
-            IFileHandler storage = new LocalStorage(ui);
-            GameController controller = new GameController(ui, storage);
+            IUI uI = new ConsoleIO();
+            IDataHandler fileStorage = new FileHandler(uI);
+            GameController controller = new(uI, fileStorage);
             controller.StartGame();
-        }
-        
+        }        
     }    
 }

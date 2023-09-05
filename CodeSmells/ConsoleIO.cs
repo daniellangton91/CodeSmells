@@ -1,31 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CodeSmells
+﻿namespace CodeSmells
 {
     internal class ConsoleIO : IUI
     {
-        public void Clear()
+        public void PutString(string input)
         {
-            Console.Clear();
+            Console.WriteLine(input);
         }
-
-        public void Exit()
-        {
-            Environment.Exit(0);
-        }
-
         public string GetString()
         {
             return Console.ReadLine();
         }
-
-        public void PutString(string input)
+        public void Clear()
         {
-            Console.WriteLine(input);
+            Console.Clear();
+        }
+        public void Exit()
+        {
+            Environment.Exit(0);
         }
     }
 }

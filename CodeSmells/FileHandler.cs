@@ -2,11 +2,11 @@
 
 namespace CodeSmells
 {
-    internal class LocalStorage : IFileHandler
+    internal class FileHandler : IDataHandler
     {
         protected List<Player> Players;
         private IUI ui;
-        public LocalStorage(IUI ui)
+        public FileHandler(IUI ui)
         {
             this.ui = ui;
         }
@@ -23,7 +23,7 @@ namespace CodeSmells
                 ui.PutString(string.Format("{0,-9}{1,5:D}{2,9:F2}", p.Name, p.NGames, p.Average()));
             }
         }
-        public void GetStatisticsFromFile(string fileName)
+        public void LoadStatistics(string fileName)
         {
             string json = "";
             try
@@ -42,10 +42,10 @@ namespace CodeSmells
             Players.Sort((p1, p2) => p1.Average().CompareTo(p2.Average()));
         }
 
-        public void PutStatisticsToFile(Player player, string fileName)
+        public void SaveStatistics(Player player, string fileName)
         {
             string fullFileName = fileName + ".txt";
-            GetStatisticsFromFile(fullFileName);
+            LoadStatistics(fullFileName);
             UpdatePlayers(player);
             string newJson = JsonConvert.SerializeObject(Players, Formatting.Indented);
             File.WriteAllText(fullFileName, newJson);

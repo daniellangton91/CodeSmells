@@ -4,23 +4,27 @@ namespace CodeSmells
 {
     internal class FileHandler : IDataHandler
     {
-        protected List<Player> Players;
-        private IUI ui;
-        public FileHandler(IUI ui)
+        private List<Player> Players { get; set; }
+        private readonly IUI uI;
+        public FileHandler(IUI uI)
         {
-            this.ui = ui;
+            this.uI = uI;
         }
         public void DisplayPlayerStatistics()
         {
             SortStatisticsByAverage();
             PrintScoreTable();
         }
+        private void SortStatisticsByAverage()
+        {
+            Players.Sort((p1, p2) => p1.Average().CompareTo(p2.Average()));
+        }
         private void PrintScoreTable()
         {
-            ui.PutString("Player   games   average");
+            uI.PutString("Player   games   average");
             foreach (Player p in Players)
             {
-                ui.PutString(string.Format("{0,-9}{1,5:D}{2,9:F2}", p.Name, p.NGames, p.Average()));
+                uI.PutString(string.Format("{0,-9}{1,5:D}{2,9:F2}", p.Name, p.NGames, p.Average()));
             }
         }
         public void LoadStatistics(string fileName)
@@ -30,18 +34,13 @@ namespace CodeSmells
             {
                 json = File.ReadAllText(fileName);
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException)
             {
                 File.Create(fileName).Close();
 
             }
             Players = JsonConvert.DeserializeObject<List<Player>>(json);
         }
-        private void SortStatisticsByAverage()
-        {
-            Players.Sort((p1, p2) => p1.Average().CompareTo(p2.Average()));
-        }
-
         public void SaveStatistics(Player player, string fileName)
         {
             string fullFileName = fileName + ".txt";
@@ -57,7 +56,7 @@ namespace CodeSmells
                 var obj = Players.FirstOrDefault(x => x.Name == player.Name);
                 if (obj != null)
                 {
-                    obj.totalGuess = player.totalGuess;
+                    obj.TotalGuess = player.TotalGuess;
                     obj.NGames = player.NGames;
                 }
                 else
@@ -69,6 +68,10 @@ namespace CodeSmells
             {
                 Players = new List<Player> { player };
             }
+        }
+        public Player CheckIfPlayerExists(string name)
+        {
+            return Players.Find(i => i.Name == name);
         }
     }
 }

@@ -2,34 +2,34 @@
 {
     internal class Moo : Game
     {
-        public Moo(IUI ui, IFileHandler storage) 
+        public Moo(IUI ui, IDataHandler storage) 
         {
-            this.uI = ui;
-            this.storage = storage;
-            gameType = "Moo";
+            this.UI = ui;
+            this.Storage = storage;
+            GameType = "Moo";
         }
         public override string GenerateRandomNumber()
         {
-            Random randomGenerator = new Random();
-            string randomNumbers = "";
+            Random randomGenerator = new();
+            string randomNumbersAsString = "";
             for (int i = 0; i < 4; i++)
             {
-                int random = randomGenerator.Next(10);
-                string randomDigit = "" + random;
-                while (randomNumbers.Contains(randomDigit))
+                int randomNumber = randomGenerator.Next(10);
+                string randomDigitAsString = "" + randomNumber;
+                while (randomNumbersAsString.Contains(randomDigitAsString))
                 {
-                    random = randomGenerator.Next(10);
-                    randomDigit = "" + random;
+                    randomNumber = randomGenerator.Next(10);
+                    randomDigitAsString = "" + randomNumber;
                 }
-                randomNumbers = randomNumbers + randomDigit;
+                randomNumbersAsString += randomDigitAsString;
             }
-            return randomNumbers;
+            return randomNumbersAsString;
         }
         public override string CompareGuessToGoal(string goal, string guess)
         {
             string cows = "", bulls = "";
             var goalAsChars = goal.AsEnumerable();
-            for (int i = 0; i < goal.Length; i++)
+            for (int i = 0; i < guess.Length; i++)
             {
                 if (guess[i] == goal[i])
                 {

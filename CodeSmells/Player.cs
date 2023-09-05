@@ -6,7 +6,7 @@ namespace CodeSmells
     {
         public string Name { get; set; }
         public int NGames { get; set; }
-        public int totalGuess { get; set; }
+        public int TotalGuess { get; set; }
 
         public Player(string name)
         {
@@ -24,12 +24,12 @@ namespace CodeSmells
 
         public void UpdateGuesses(int guesses)
         {
-            totalGuess += guesses;
+            TotalGuess += guesses;
         }
 
         public double Average()
         {
-            return (double)totalGuess / NGames;
+            return (double)TotalGuess / NGames;
         }
     }
 }

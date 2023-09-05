@@ -1,79 +1,97 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CodeSmells
+﻿namespace CodeSmells
 {
     public abstract class Game : IGame
     {
-        public IUI uI { get; set; }
-        public IFileHandler storage { get; set; }
-        public int numberOfGuesses;
-        public string guess;
-        public bool keepPlaying = true;
-        public string goal;
-        public string bullsAndCowsResult;
-        public string gameType { get; set; }
+        public IUI UI { get; set; }
+        public IDataHandler Storage { get; set; }
+        private Player Player { get; set; }
+        private int numberOfGuesses;
+        private bool keepPlaying = true;
+        private string goal;
+        public string GameType { get; set; }
 
+        public void PlayGame()
+        {
+            UI.Clear();
+            UI.PutString($"{GameType}\n");
+            UI.PutString("Enter your user name:");
+            string playerName = UI.GetString();
+            CreateOrUseExistingPlayer(playerName);
+            do
+            {
+                Player.UpdatePlayedGames();
+                numberOfGuesses = 0;
+                goal = GenerateRandomNumber();
+                PracticeGame();
+                UI.PutString("New game:");
+                CheckCorrectAnswer();
+                Player.UpdateGuesses(numberOfGuesses);
+                Storage.SaveStatistics(Player, $"{GameType}Stats");
+                Storage.DisplayPlayerStatistics();
+                UI.PutString("Correct, it took " + numberOfGuesses + " guesses\n");
+                UI.PutString("Play a new game?");
+                string Answer = UI.GetString();
+                if (Answer != null && Answer != "" && Answer[..1] == "n")
+                {
+                    keepPlaying = false;
+                }
+                UI.Clear();
+            } while (keepPlaying == true);
+        }
+        private void CreateOrUseExistingPlayer(string playerName)
+        {
+            Storage.LoadStatistics($"{GameType}Stats.txt");
+            var playerFromList = Storage.CheckIfPlayerExists(playerName);
+            if (playerFromList == null)
+            {
+                SetPlayer(new Player(playerName));
+            }
+            else
+            {
+                SetPlayer(playerFromList);
+            }
+        }
+        private void SetPlayer(Player player)
+        {
+            this.Player = player;
+        }
+        public abstract string GenerateRandomNumber();
+        private void PracticeGame()
+        {
+            UI.PutString("Do you want to practice y/n?");
+            string practiceAnswer = UI.GetString();
+            if (practiceAnswer == "y")
+            {
+                UI.PutString("For practice, number is: " + goal + "\n");
+            }
+        }
         public void CheckCorrectAnswer()
         {
+            string guess;
             do
             {                
                 guess = GetGuess();
-                uI.PutString(CompareGuessToGoal(goal, guess));
+                UI.PutString(CompareGuessToGoal(goal, guess));
                 numberOfGuesses++;
             } while (guess != goal);
-        }
-        public string GetGuess()
+        }        
+        private string GetGuess()
         {
-            string guessAsString = uI.GetString();
-            while(guessAsString.Length != 4 || !int.TryParse(guessAsString, out int guessAsInt))
+            string guessAsString = UI.GetString();
+            while (guessAsString.Length != 4 || !int.TryParse(guessAsString, out _))
             {
-                uI.PutString("Enter a 4 digit number");
-                guessAsString = uI.GetString();
+                UI.PutString("Enter a 4 digit number");
+                guessAsString = UI.GetString();
             }
             return guessAsString;
         }
         public abstract string CompareGuessToGoal(string goal, string guess);
-        public abstract string GenerateRandomNumber();
+        
 
-        public void PlayGame()
-        {
-            uI.Clear();
-            uI.PutString($"{gameType}\n");
-            uI.PutString("Enter your user name:");
-            Player player = new Player(uI.GetString());
-            do
-            {
-                player.UpdatePlayedGames();
-                numberOfGuesses = 0;
-                goal = GenerateRandomNumber();
-                PracticeGame();
-                uI.PutString("New game:");
-                CheckCorrectAnswer();
-                player.UpdateGuesses(numberOfGuesses);
-                storage.PutStatisticsToFile(player, $"{gameType}Stats");
-                storage.DisplayPlayerStatistics();
-                uI.PutString("Correct, it took " + numberOfGuesses + " guesses\n");
-                uI.PutString("Play a new game?");
-                string Answer = uI.GetString();
-                if (Answer != null && Answer != "" && Answer.Substring(0, 1) == "n")
-                {
-                    keepPlaying = false;
-                }
-                uI.Clear();
-            } while (keepPlaying == true);
-        }
-        private void PracticeGame()
-        {
-            uI.PutString("Do you want to practice y/n?");
-            string practiceAnswer = uI.GetString();
-            if (practiceAnswer == "y")
-            {
-                uI.PutString("For practice, number is: " + goal + "\n");
-            }
-        }
+        
+
+        
+
+        
     }
 }

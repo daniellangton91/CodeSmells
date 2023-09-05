@@ -2,22 +2,22 @@
 {
     internal class Mastermind : Game
     {
-        public Mastermind(IUI ui, IFileHandler storage)
+        public Mastermind(IUI ui, IDataHandler storage)
         {
-            this.uI = ui;
-            this.storage = storage;
-            gameType = "Mastermind";
+            this.UI = ui;
+            this.Storage = storage;
+            GameType = "Mastermind";
         }
         public override string GenerateRandomNumber()
         {
-            Random randomGenerator = new Random();
-            string goal = "";
+            Random randomGenerator = new();
+            string randomNumbersAsString = "";
             for (int i = 0; i < 4; i++)
             {
-                int random = randomGenerator.Next(7);
-                goal = goal + random;
+                int randomNumber = randomGenerator.Next(7);
+                randomNumbersAsString += randomNumber;
             }
-            return goal;
+            return randomNumbersAsString;
         }
         public override string CompareGuessToGoal(string goal, string guess)
         {

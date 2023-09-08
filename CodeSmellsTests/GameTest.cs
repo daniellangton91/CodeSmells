@@ -1,41 +1,34 @@
-using CodeSmells;
-
 namespace CodeSmellsTests
 {
     [TestClass]
     public class GameTest
     {
-        readonly MockGame mockGame = new();
-        Player player = new("TestPlayer");
+        readonly IUI uI = new MockUI();
+        readonly IDataHandler dataHandler = new MockDataHandler();
+
         [TestMethod]
         public void TestGenerateRandomNumber()
         {
+            MockGame mockGame = new(uI, dataHandler, "Mock");
             Assert.AreEqual("1234", mockGame.GenerateRandomNumber());
         }
         [TestMethod]
         public void TestCorrectGuess()
         {
+            MockGame mockGame = new(uI, dataHandler, "Mock");
+            Moo mooGame = new(uI, dataHandler, "Moo");
             string guess = "1234";
             string goal = mockGame.GenerateRandomNumber();
-            Assert.AreEqual("BBBB,", mockGame.CompareGuessToGoal(goal, guess));
+            Assert.AreEqual("BBBB,", mooGame.CompareGuessToGoal(goal, guess));
         }
         [TestMethod]
         public void TestCorrectNumbersInWrongOrder()
         {
+            MockGame mockGame = new(uI, dataHandler, "Mock");
+            Moo mooGame = new(uI, dataHandler, "Moo");
             string guess = "4321";
             string goal = mockGame.GenerateRandomNumber();
-            Assert.AreEqual(",CCCC", mockGame.CompareGuessToGoal(goal, guess));
-        }
-        [TestMethod]
-        public void TestGetGuessFromUser()
-        {
-            Assert.IsNotNull(MockGame.GetGuessFromUser());
-        }
-        [TestMethod]
-        public void TestSetPlayer() 
-        {
-            mockGame.SetPlayer(player);
-            Assert.AreEqual(player.Name, mockGame.Player.Name);
+            Assert.AreEqual(",CCCC", mooGame.CompareGuessToGoal(goal, guess));
         }
     }
 }

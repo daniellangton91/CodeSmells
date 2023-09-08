@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSmells", "CodeSmells\CodeSmells.csproj", "{1AF2AFE4-D149-415C-B9C8-0908EBA4F85C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSmellsTests", "CodeSmellsTests\CodeSmellsTests.csproj", "{2FE3DFB4-9CBF-4D50-9898-2BF5CC57F96E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1AF2AFE4-D149-415C-B9C8-0908EBA4F85C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AF2AFE4-D149-415C-B9C8-0908EBA4F85C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AF2AFE4-D149-415C-B9C8-0908EBA4F85C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FE3DFB4-9CBF-4D50-9898-2BF5CC57F96E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FE3DFB4-9CBF-4D50-9898-2BF5CC57F96E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FE3DFB4-9CBF-4D50-9898-2BF5CC57F96E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FE3DFB4-9CBF-4D50-9898-2BF5CC57F96E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

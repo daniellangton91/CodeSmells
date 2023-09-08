@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-
 namespace CodeSmells
 {
     internal class FileHandler : IDataHandler
@@ -71,7 +70,15 @@ namespace CodeSmells
         }
         public Player CheckIfPlayerExists(string name)
         {
-            return Players.Find(i => i.Name == name);
+            bool isNullOrEmpty = Players?.Any() != true;            
+            if (!isNullOrEmpty)
+            {
+                return Players.Find(i => i.Name == name);
+            }
+            else
+            {
+                return new Player(name);
+            }
         }
     }
 }

@@ -41,15 +41,16 @@
         private void CreateOrUseExistingPlayer(string playerName)
         {
             Storage.LoadStatistics($"{GameType}Stats.txt");
-            var playerFromList = Storage.CheckIfPlayerExists(playerName);
-            if (playerFromList == null)
+            var playerFromFile = Storage.CheckIfPlayerExists(playerName);
+            if (playerFromFile != null)
             {
-                SetPlayer(new Player(playerName));
+                SetPlayer(playerFromFile);
             }
             else
             {
-                SetPlayer(playerFromList);
+                SetPlayer(new Player(playerName));
             }
+            
         }
         private void SetPlayer(Player player)
         {
@@ -60,7 +61,7 @@
         {
             UI.PutString("Do you want to practice y/n?");
             string practiceAnswer = UI.GetString();
-            if (practiceAnswer == "y")
+            if (practiceAnswer[..1] == "y" || practiceAnswer[..1] == "Y")
             {
                 UI.PutString("For practice, number is: " + goal + "\n");
             }
@@ -70,12 +71,12 @@
             string guess;
             do
             {                
-                guess = GetGuess();
+                guess = GetGuessFromUser();
                 UI.PutString(CompareGuessToGoal(goal, guess));
                 numberOfGuesses++;
             } while (guess != goal);
         }        
-        private string GetGuess()
+        private string GetGuessFromUser()
         {
             string guessAsString = UI.GetString();
             while (guessAsString.Length != 4 || !int.TryParse(guessAsString, out _))

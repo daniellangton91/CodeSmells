@@ -1,14 +1,9 @@
 ﻿using CodeSmells;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace CodeSmellsTests
 {
     internal class MockGame : Game
     {
+        public Player Player = new();
         public override string CompareGuessToGoal(string goal, string guess)
         {
             string cows = "", bulls = "";
@@ -29,6 +24,14 @@ namespace CodeSmellsTests
         public override string GenerateRandomNumber()
         {
             return "1234";
+        }
+        public static string GetGuessFromUser()
+        {
+            return "1234";
+        }
+        public void SetPlayer(Player player)
+        {
+            this.Player = player;
         }
     }
 }

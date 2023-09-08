@@ -2,12 +2,7 @@
 {
     internal class Mastermind : Game
     {
-        public Mastermind(IUI ui, IDataHandler storage)
-        {
-            this.UI = ui;
-            this.Storage = storage;
-            GameType = "Mastermind";
-        }
+        public Mastermind(IUI ui, IDataHandler dataHandler, string gameType) : base(ui, dataHandler, gameType) { }
         public override string GenerateRandomNumber()
         {
             Random randomGenerator = new();
@@ -21,20 +16,21 @@
         }
         public override string CompareGuessToGoal(string goal, string guess)
         {
-            string cows = "", bulls = "";
-            var goalAsChars = goal.AsEnumerable();
+            string correctNumberWrongPlace = "";
+            string correctNumberCorrectPlace = "";
+            var goalAsCharArray = goal.AsEnumerable();
             for (int i = 0; i < goal.Length; i++)
             {
                 if (guess[i] == goal[i])
                 {
-                    bulls += "B";
+                    correctNumberCorrectPlace += "B";
                 }
                 else
                 {
-                    cows += goalAsChars.Contains(guess[i]) ? "C" : "";
+                    correctNumberWrongPlace += goalAsCharArray.Contains(guess[i]) ? "C" : "";
                 }
             }
-            return $"{bulls},{cows}";
+            return $"{correctNumberCorrectPlace},{correctNumberWrongPlace}";
         }
     }
 }

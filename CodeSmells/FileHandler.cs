@@ -16,14 +16,14 @@ namespace CodeSmells
         }
         private void SortStatisticsByAverage()
         {
-            Players.Sort((p1, p2) => p1.Average().CompareTo(p2.Average()));
+            Players.Sort((p1, p2) => p1.CalculateAverageScore().CompareTo(p2.CalculateAverageScore()));
         }
         private void PrintScoreTable()
         {
             uI.PutString("Player   games   average");
             foreach (Player p in Players)
             {
-                uI.PutString(string.Format("{0,-9}{1,5:D}{2,9:F2}", p.Name, p.NGames, p.Average()));
+                uI.PutString(string.Format("{0,-9}{1,5:D}{2,9:F2}", p.Name, p.NumberOfPlayedGames, p.CalculateAverageScore()));
             }
         }
         public void LoadStatistics(string fileName)
@@ -55,8 +55,8 @@ namespace CodeSmells
                 var obj = Players.FirstOrDefault(x => x.Name == player.Name);
                 if (obj != null)
                 {
-                    obj.TotalGuess = player.TotalGuess;
-                    obj.NGames = player.NGames;
+                    obj.TotalGuesses = player.TotalGuesses;
+                    obj.NumberOfPlayedGames = player.NumberOfPlayedGames;
                 }
                 else
                 {
@@ -70,7 +70,7 @@ namespace CodeSmells
         }
         public Player CheckIfPlayerExists(string name)
         {
-            bool isNullOrEmpty = Players?.Any() != true;            
+            bool isNullOrEmpty = Players?.Any() != true;
             if (!isNullOrEmpty)
             {
                 return Players.Find(i => i.Name == name);

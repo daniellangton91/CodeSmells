@@ -2,16 +2,23 @@
 {
     public abstract class Game : IGame
     {
-        public IUI UI { get; set; }
-        public IDataHandler Storage { get; set; }
+        public IUI UI { get; private set; }
+        public IDataHandler DataHandler { get; private set; }
         private Player Player { get; set; }
         private int numberOfGuesses;
-        private bool keepPlaying = true;
         private string goal;
-        public string GameType { get; set; }
+        private string GameType { get; set; }
 
+        public Game(IUI ui, IDataHandler dataHandler, string gameType)
+        {
+            this.UI = ui;
+            this.DataHandler = dataHandler;
+            this.GameType = gameType;
+        }
+        private void SetPlayer(Player player) => this.Player = player;
         public void PlayGame()
         {
+            bool keepPlaying = true;
             UI.Clear();
             UI.PutString($"{GameType}\n");
             UI.PutString("Enter your user name:");
@@ -26,8 +33,8 @@
                 UI.PutString("New game:");
                 CheckCorrectAnswer();
                 Player.UpdateGuesses(numberOfGuesses);
-                Storage.SaveStatistics(Player, $"{GameType}Stats");
-                Storage.DisplayPlayerStatistics();
+                DataHandler.SaveStatistics(Player, $"{GameType}Stats");
+                DataHandler.DisplayPlayerStatistics();
                 UI.PutString("Correct, it took " + numberOfGuesses + " guesses\n");
                 UI.PutString("Play a new game?");
                 string Answer = UI.GetString();
@@ -40,8 +47,8 @@
         }
         private void CreateOrUseExistingPlayer(string playerName)
         {
-            Storage.LoadStatistics($"{GameType}Stats.txt");
-            var playerFromFile = Storage.CheckIfPlayerExists(playerName);
+            DataHandler.LoadStatistics($"{GameType}Stats.txt");
+            var playerFromFile = DataHandler.CheckIfPlayerExists(playerName);
             if (playerFromFile != null)
             {
                 SetPlayer(playerFromFile);
@@ -50,11 +57,6 @@
             {
                 SetPlayer(new Player(playerName));
             }
-            
-        }
-        private void SetPlayer(Player player)
-        {
-            this.Player = player;
         }
         public abstract string GenerateRandomNumber();
         private void PracticeGame()
@@ -70,12 +72,12 @@
         {
             string guess;
             do
-            {                
+            {
                 guess = GetGuessFromUser();
                 UI.PutString(CompareGuessToGoal(goal, guess));
                 numberOfGuesses++;
             } while (guess != goal);
-        }        
+        }
         private string GetGuessFromUser()
         {
             string guessAsString = UI.GetString();
@@ -87,12 +89,5 @@
             return guessAsString;
         }
         public abstract string CompareGuessToGoal(string goal, string guess);
-        
-
-        
-
-        
-
-        
     }
 }

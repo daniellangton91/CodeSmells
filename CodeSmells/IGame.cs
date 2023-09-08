@@ -1,6 +1,6 @@
 ﻿namespace CodeSmells
 {
-    internal interface IGame
+    public interface IGame
     {
         void PlayGame();
         string GenerateRandomNumber();

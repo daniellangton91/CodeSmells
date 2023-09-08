@@ -4,16 +4,14 @@
     {
         private readonly IUI uI;
         private IGame game;
-        private readonly IDataHandler fileStorage;
-        public GameController(IUI uI, IDataHandler fileStorage) 
+        private readonly IDataHandler dataHandler;
+
+        public GameController(IUI uI, IDataHandler dataHandler)
         {
             this.uI = uI;
-            this.fileStorage = fileStorage;
+            this.dataHandler = dataHandler;
         }
-        private void SetGame(IGame game)
-        {
-            this.game = game;
-        }
+        private void SetGame(IGame game) => this.game = game;
         public void Start()
         {
             do
@@ -28,11 +26,11 @@
                 switch (menuChoice)
                 {
                     case 1:
-                        SetGame(new Moo(uI, fileStorage));
+                        SetGame(new Moo(uI, dataHandler, "Moo"));
                         game.PlayGame();
                         break;
                     case 2:
-                        SetGame(new Mastermind(uI, fileStorage));
+                        SetGame(new Mastermind(uI, dataHandler, "Mastermind"));
                         game.PlayGame();
                         break;
                     case 3:
@@ -41,14 +39,14 @@
                     default:
                         uI.PutString("Make a correct menu choice");
                         break;
-                }                
+                }
             } while (true);
-        } 
-        public int NumberInput()
+        }
+        private int NumberInput()
         {
             string input = uI.GetString();
             int menuChoice;
-            while(!int.TryParse(input, out menuChoice))
+            while (!int.TryParse(input, out menuChoice))
             {
                 uI.PutString("Input must be a number");
                 input = uI.GetString();

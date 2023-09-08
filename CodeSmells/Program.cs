@@ -5,9 +5,9 @@
         public static void Main()
         {
             IUI uI = new ConsoleIO();
-            IDataHandler fileStorage = new FileHandler(uI);
-            GameController controller = new(uI, fileStorage);
+            IDataHandler dataHandler = new FileHandler(uI);
+            GameController controller = new(uI, dataHandler);
             controller.Start();
-        }        
-    }    
+        }
+    }
 }

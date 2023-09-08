@@ -1,35 +1,21 @@
-﻿using System.Xml.Linq;
-
-namespace CodeSmells
+﻿namespace CodeSmells
 {
     public class Player
     {
         public string Name { get; set; }
-        public int NGames { get; set; }
-        public int TotalGuess { get; set; }
+        public int NumberOfPlayedGames { get; set; }
+        public int TotalGuesses { get; set; }
 
         public Player(string name)
         {
             this.Name = name;
-            NGames = 0;
+            NumberOfPlayedGames = 0;
         }
-        public Player()
+        public void UpdatePlayedGames() => NumberOfPlayedGames++;
+        public void UpdateGuesses(int guesses) => TotalGuesses += guesses;
+        public double CalculateAverageScore()
         {
-
-        }
-        public void UpdatePlayedGames()
-        {
-            NGames++;
-        }
-
-        public void UpdateGuesses(int guesses)
-        {
-            TotalGuess += guesses;
-        }
-
-        public double Average()
-        {
-            return (double)TotalGuess / NGames;
+            return (double)TotalGuesses / NumberOfPlayedGames;
         }
     }
 }
